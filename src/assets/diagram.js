@@ -55,8 +55,6 @@ DiagramEditor.prototype.config = null;
  * Protocol and domain to use.
  */
 // DiagramEditor.prototype.drawDomain = 'https://embed.diagrams.net/';
-DiagramEditor.prototype.drawDomain = 'http://localhost:8888/src/main/webapp/?&proto=json&libraries=1&embed=1&spin=1';
-
 
 /**
  * UI theme to be use.

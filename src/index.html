@@ -95,13 +95,36 @@
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {
+function injectCss(iframe) {
 
-    const image = document.querySelector('#bootrap');
+    if(!iframe || !iframe.contentDocument || !iframe.contentDocument.head) {
+        setTimeout(() => {
+            injectCss(iframe);
+        }, 100);
+        return;
+    }
+
+    const scripts = iframe.contentDocument.head.querySelectorAll('script');
+    if(scripts.length === 0) {
+        setTimeout(() => {
+            injectCss(iframe);
+        }, 100);
+        return;
+    }
+
+    iframeHead = iframe.contentDocument.head;
+    const css = document.createElement('link');
+    css.setAttribute('rel', 'stylesheet');
+    css.setAttribute('href', '/assets/diagram.css');
+    iframeHead.appendChild(css);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    DiagramEditor.prototype.drawDomain = '/src/main/webapp/?&proto=json&libraries=1&embed=1&spin=1';
     const graphEditor = new DiagramEditor();
 
     setTimeout(async () => {
-        const customXmlData = await fetch('./_backend/demo/cms.drawio')
+        const customXmlData = await fetch('/_backend/demo/cms.drawio')
             .then(response => response.text())
             .catch(error => console.error(error));
         graphEditor.startEditing(customXmlData, 'xml', '');
@@ -109,19 +132,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let sql = await getSql(customXmlData);
         monacoEditor.setValue(sql);
 
-
-
         const iframe = graphEditor.frame;
-
         setTimeout(() => {
-            iframeHead = iframe.contentDocument.head;
-            const css = document.createElement('link');
-            css.setAttribute('rel', 'stylesheet');
-            css.setAttribute('href', '/assets/diagram.css');
-            iframeHead.appendChild(css);
+            document.querySelector('#panel-left').appendChild(iframe);
+            injectCss(iframe);
         }, 250);
 
         document.querySelector('#panel-left').appendChild(iframe);
+        injectCss(iframe);
     }, 100);
 
     // ===========================
