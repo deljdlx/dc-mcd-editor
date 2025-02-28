@@ -5,8 +5,8 @@ services:
     restart: always
     env_file:
       - .env
-    ports:
-      - "8888:80"
+    # ports:
+    #   - "8888:80"
     volumes:
       - "./src:/var/www/html"
       - "./compose/nginx.conf:/etc/nginx/nginx.conf"
