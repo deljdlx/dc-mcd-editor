@@ -1,0 +1,7 @@
+.geToolbar button[title="Save & Exit (Ctrl+S)"] {
+  display: none;
+}
+.geToolbar button[title="Exit"] {
+  display: none;
+}
+
